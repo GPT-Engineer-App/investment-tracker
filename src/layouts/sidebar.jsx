@@ -48,10 +48,6 @@ const Sidebar = () => (
               {item.title}
             </SidebarNavLink>
           ))}
-          <SidebarNavLink to="/stocks">
-            <BarChart2 className="h-4 w-4" />
-            Stocks
-          </SidebarNavLink>
         </nav>
       </div>
     </div>
