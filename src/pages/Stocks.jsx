@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -9,17 +10,25 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { fetchStockValues } from "@/services/finance";
 
 const Stocks = () => {
   const [stocks, setStocks] = useState([]);
   const [stockName, setStockName] = useState("");
   const [shares, setShares] = useState("");
 
+  const { data: stockValues, refetch } = useQuery({
+    queryKey: ["stockValues"],
+    queryFn: () => fetchStockValues(stocks),
+    enabled: false,
+  });
+
   const addStock = () => {
     if (stockName && shares) {
       setStocks([...stocks, { stockName, shares }]);
       setStockName("");
       setShares("");
+      refetch();
     }
   };
 
@@ -44,6 +53,7 @@ const Stocks = () => {
           <TableRow>
             <TableHead>Stock Name</TableHead>
             <TableHead>Number of Shares</TableHead>
+            <TableHead>Current Value</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -51,6 +61,9 @@ const Stocks = () => {
             <TableRow key={index}>
               <TableCell>{stock.stockName}</TableCell>
               <TableCell>{stock.shares}</TableCell>
+              <TableCell>
+                {stockValues?.[stock.stockName]?.currentValue || "Loading..."}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
