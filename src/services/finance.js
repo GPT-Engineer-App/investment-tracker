@@ -5,10 +5,17 @@ const API_URL = "https://www.google.com/finance/quote/";
 export const fetchStockValues = async (stocks) => {
   const stockValues = {};
   for (const stock of stocks) {
-    const response = await axios.get(`${API_URL}${stock.stockName}`);
-    stockValues[stock.stockName] = {
-      currentValue: response.data.price,
-    };
+    try {
+      const response = await axios.get(`${API_URL}${stock.stockName}`);
+      // Assuming the response structure contains a 'price' field
+      stockValues[stock.stockName] = {
+        currentValue: response.data.price,
+      };
+    } catch (error) {
+      console.error(`Error fetching data for ${stock.stockName}:`, error);
+      stockValues[stock.stockName] = {
+        currentValue: 0, // Default to 0 if there's an error
+      };
   }
   return stockValues;
 };
