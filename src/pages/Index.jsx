@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchPortfolioValue } from "@/services/finance";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 
 const Index = () => {
   const { data, error, isLoading } = useQuery({
@@ -8,7 +9,12 @@ const Index = () => {
   });
 
   if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error loading portfolio value</div>;
+  if (error) return (
+    <Alert>
+      <AlertTitle>Error</AlertTitle>
+      <AlertDescription>Error loading portfolio value</AlertDescription>
+    </Alert>
+  );
 
   return (
     <div className="text-center">
