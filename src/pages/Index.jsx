@@ -1,11 +1,22 @@
+import { useQuery } from "@tanstack/react-query";
+import { fetchPortfolioValue } from "@/services/finance";
+
 const Index = () => {
+  const { data, error, isLoading } = useQuery({
+    queryKey: ["portfolioValue"],
+    queryFn: fetchPortfolioValue,
+  });
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error loading portfolio value</div>;
+
   return (
     <div className="text-center">
       <h1 className="text-3xl">Welcome to InvestTrack</h1>
       <p>Your portfolio overview:</p>
       <div className="mt-4">
-        <p>Total Value: $100,000</p>
-        <p>Number of Assets: 10</p>
+        <p>Total Value: ${data.totalValue}</p>
+        <p>Number of Assets: {data.numberOfAssets}</p>
       </div>
     </div>
   );
