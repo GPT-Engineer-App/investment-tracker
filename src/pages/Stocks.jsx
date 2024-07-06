@@ -11,9 +11,11 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { fetchStockValues } from "@/services/finance";
+import { useRecoilState } from 'recoil';
+import { stockState } from '@/recoil/atoms';
 
 const Stocks = () => {
-  const [stocks, setStocks] = useState([]);
+  const [stocks, setStocks] = useRecoilState(stockState);
   const [stockName, setStockName] = useState("");
   const [shares, setShares] = useState("");
 
@@ -28,7 +30,6 @@ const Stocks = () => {
       setStocks([...stocks, { stockName, shares }]);
       setStockName("");
       setShares("");
-      refetch();
     }
   };
 

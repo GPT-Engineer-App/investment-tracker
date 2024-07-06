@@ -3,6 +3,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Home, BarChart2, List, Settings } from "lucide-react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { RecoilRoot } from 'recoil';
 import Layout from "./layouts/sidebar"; // Use the sidebar layout
 import Index from "./pages/Index.jsx";
 import Portfolio from "./pages/Portfolio.jsx";
@@ -41,22 +42,24 @@ export const navItems = [
 
 const App = () => {
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Router>
-          <Routes>
-            <Route path="/" element={<Layout />}>
-              <Route index element={<Index />} />
-              <Route path="portfolio" element={<Portfolio />} />
-              <Route path="transactions" element={<Transactions />} />
-              <Route path="settings" element={<SettingsPage />} />
-              <Route path="stocks" element={<Stocks />} />
-            </Route>
-          </Routes>
-        </Router>
-      </TooltipProvider>
-    </QueryClientProvider>
+    <RecoilRoot>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Toaster />
+          <Router>
+            <Routes>
+              <Route path="/" element={<Layout />}>
+                <Route index element={<Index />} />
+                <Route path="portfolio" element={<Portfolio />} />
+                <Route path="transactions" element={<Transactions />} />
+                <Route path="settings" element={<SettingsPage />} />
+                <Route path="stocks" element={<Stocks />} />
+              </Route>
+            </Routes>
+          </Router>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </RecoilRoot>
   );
 };
 
