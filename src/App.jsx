@@ -8,6 +8,7 @@ import Index from "./pages/Index.jsx";
 import Portfolio from "./pages/Portfolio.jsx";
 import Transactions from "./pages/Transactions.jsx";
 import SettingsPage from "./pages/Settings.jsx";
+import Stocks from "./pages/Stocks.jsx";
 const queryClient = new QueryClient();
 
 export const navItems = [
@@ -31,6 +32,11 @@ export const navItems = [
     to: "/settings",
     icon: <Settings className="h-4 w-4" />,
   },
+  {
+    title: "Stocks",
+    to: "/stocks",
+    icon: <BarChart2 className="h-4 w-4" />,
+  },
 ];
 
 const App = () => {
@@ -45,6 +51,7 @@ const App = () => {
               <Route path="portfolio" element={<Portfolio />} />
               <Route path="transactions" element={<Transactions />} />
               <Route path="settings" element={<SettingsPage />} />
+              <Route path="stocks" element={<Stocks />} />
             </Route>
           </Routes>
         </Router>
