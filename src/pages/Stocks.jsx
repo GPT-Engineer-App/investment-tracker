@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useForm, Controller } from "react-hook-form";
 import {
   Table,
   TableBody,
@@ -16,6 +17,7 @@ import { stockState } from '@/recoil/atoms';
 
 const Stocks = () => {
   const [stocks, setStocks] = useRecoilState(stockState);
+  const { control, handleSubmit, formState: { errors } } = useForm();
   const [stockName, setStockName] = useState("");
   const [shares, setShares] = useState("");
 
@@ -25,30 +27,44 @@ const Stocks = () => {
     enabled: false,
   });
 
-  const addStock = () => {
-    if (stockName && shares) {
-      setStocks([...stocks, { stockName, shares }]);
+  const addStock = handleSubmit((data) => {
+    if (stockName && data.shares) {
+      setStocks([...stocks, { stockName, shares: data.shares }]);
       setStockName("");
       setShares("");
     }
-  };
+  });
 
   return (
     <div className="p-4">
       <h1 className="text-3xl mb-4">Stocks</h1>
-      <div className="flex gap-4 mb-4">
-        <Input
-          placeholder="Stock Name"
-          value={stockName}
-          onChange={(e) => setStockName(e.target.value)}
-        />
-        <Input
-          placeholder="Number of Shares"
-          value={shares}
-          onChange={(e) => setShares(e.target.value)}
-        />
-        <Button onClick={addStock}>Add Stock</Button>
-      </div>
+      <form onSubmit={addStock}>
+        <div className="flex gap-4 mb-4">
+          <Input
+            placeholder="Stock Name"
+            value={stockName}
+            onChange={(e) => setStockName(e.target.value)}
+          />
+          <Controller
+            name="shares"
+            control={control}
+            rules={{ required: true, pattern: /^[0-9]+$/ }}
+            render={({ field }) => (
+              <Input
+                {...field}
+                placeholder="Number of Shares"
+                value={shares}
+                onChange={(e) => {
+                  setShares(e.target.value);
+                  field.onChange(e);
+                }}
+              />
+            )}
+          />
+          <Button type="submit">Add Stock</Button>
+        </div>
+        {errors.shares && <p className="text-red-500">Please enter a valid number of shares.</p>}
+      </form>
       <Table>
         <TableHeader>
           <TableRow>
