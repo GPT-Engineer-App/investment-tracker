@@ -1,22 +1,25 @@
 import axios from "axios";
 
-const API_URL = "https://www.google.com/finance/quote/";
+const API_URL = "https://query1.finance.yahoo.com/v7/finance/quote?symbols=";
 
 export const fetchStockValues = async (stocks) => {
   const stockValues = {};
-  for (const stock of stocks) {
-    try {
-      const response = await axios.get(`${API_URL}${stock.stockName}`);
-      // Assuming the response structure contains a 'price' field
-      stockValues[stock.stockName] = {
-        currentValue: response.data.price,
+  const stockSymbols = stocks.map(stock => stock.stockName).join(",");
+  try {
+    const response = await axios.get(`${API_URL}${stockSymbols}`);
+    const quotes = response.data.quoteResponse.result;
+    quotes.forEach(quote => {
+      stockValues[quote.symbol] = {
+        currentValue: quote.regularMarketPrice,
       };
-    } catch (error) {
-      console.error(`Error fetching data for ${stock.stockName}:`, error);
+    });
+  } catch (error) {
+    console.error("Error fetching stock data:", error);
+    stocks.forEach(stock => {
       stockValues[stock.stockName] = {
         currentValue: 0, // Default to 0 if there's an error
       };
-    }
+    });
   }
   return stockValues;
 };
