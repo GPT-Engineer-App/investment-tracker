@@ -16,6 +16,7 @@ export const fetchStockValues = async (stocks) => {
       stockValues[stock.stockName] = {
         currentValue: 0, // Default to 0 if there's an error
       };
+    }
   }
   return stockValues;
 };
